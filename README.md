@@ -1,6 +1,6 @@
 # TaskFlow — Task Management Application
 
-A full-stack task management application built as a 24-hour technical assessment.
+A full-stack task management application built as a technical assessment.
 Live demo, secure authentication, AES encryption, and full CRUD task management.
 
 **Live URLs**
@@ -321,18 +321,41 @@ GET /tasks?page=1&limit=9&status=pending&search=deploy
 
 ## Deployment
 
-### Backend → Railway
-1. Push repo to GitHub
-2. New project on Railway → Deploy from GitHub
+### Backend → Render
+1. Go to [render.com](https://render.com) → New → **Web Service**
+2. Connect your GitHub repo
 3. Set root directory to `backend`
-4. Add environment variables in Railway dashboard
-5. Deploy — Railway auto-detects Node.js and runs `npm start`
+4. Set the following:
+   - **Environment:** Node
+   - **Build Command:** `npm install`
+   - **Start Command:** `npm start`
+5. Add environment variables:
+   ```
+   PORT=5000
+   NODE_ENV=production
+   MONGO_URI=your_mongodb_atlas_uri
+   JWT_SECRET=your_jwt_secret
+   JWT_EXPIRES_IN=7d
+   AES_SECRET_KEY=your_32_char_aes_key
+   CLIENT_URL=https://your-app.onrender.com
+   ```
+6. Click **Create Web Service**
+7. Render gives you a URL like `https://task-manager-api.onrender.com`
+8. Test: `https://task-manager-api.onrender.com/health`
 
-### Frontend → Vercel
-1. New project on Vercel → Import GitHub repo
-2. Set root directory to `frontend`
-3. Add environment variable: `VITE_API_URL=https://your-railway-url.up.railway.app/api`
-4. Deploy
+### Frontend → Render
+1. Go to Render → New → **Static Site**
+2. Connect your GitHub repo
+3. Set root directory to `frontend`
+4. Set the following:
+   - **Build Command:** `npm install && npm run build`
+   - **Publish Directory:** `dist`
+5. Add environment variable:
+   ```
+   VITE_API_URL=https://your-backend.onrender.com/api
+   ```
+6. Click **Create Static Site**
+7. Render gives you a URL like `https://task-manager.onrender.com`
 
 ### After both are deployed
-Update `CLIENT_URL` in Railway environment variables to your Vercel URL and redeploy backend.
+Go back to your backend service on Render → Environment → update `CLIENT_URL` to your frontend Render URL → click **Save Changes** (auto redeploys)
